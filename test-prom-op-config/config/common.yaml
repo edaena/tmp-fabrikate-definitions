@@ -1,0 +1,32 @@
+config:
+subcomponents:
+  fabrikate-prometheus-operator:
+    subcomponents:
+      prometheus-operator:
+        namespace: monitoring
+        injectNamespace: true
+        config:
+          coreDns:
+            enabled: true
+          kubeDns:
+            enabled: false
+          alertmanager:
+            ingress:
+              enabled: "true"
+            alertmanagerSpec:
+              logLevel: "debug"
+              storage:
+                volumeClaimTemplate:
+                  spec:
+                    accessModes: ["ReadWriteOnce"]
+                    resources:
+                      requests:
+                        storage: 10Gi
+          grafana:
+            adminUser: "adminss"
+            adminPassword: "grafana"
+            ingress:
+              enabled: "true"
+          prometheus:
+            ingress:
+              enabled: "true"

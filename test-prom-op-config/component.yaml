@@ -1,0 +1,7 @@
+name: "test-prom-op-config"
+subcomponents:
+  - name: "fabrikate-prometheus-operator"
+    type: component
+    source: "git@github.com:edaena/tmp-fabrikate-definitions.git"
+    path: "prometheus-operator"
+    method: git
