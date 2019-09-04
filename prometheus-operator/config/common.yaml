@@ -1,0 +1,73 @@
+config:
+subcomponents:
+  prometheus-operator:
+    namespace: monitoring
+    injectNamespace: true
+    config:
+      coreDns:
+        enabled: true
+      kubeDns:
+        enabled: false
+      alertmanager:
+        alertmanagerSpec:
+          logLevel: "debug"
+          storage:
+            volumeClaimTemplate:
+              spec:
+                accessModes: ["ReadWriteOnce"]
+                resources:
+                  requests:
+                    storage: 10Gi
+        ingress:
+          enabled: true
+          annotations:
+            kubernetes.io/ingress.class: nginx
+            kubernetes.io/tls-acme: "true"
+          hosts:
+            - "alertmanager-space-westus2.mydomain"
+          tls:
+            - secretName: "mysslcert"
+              hosts:
+                - "alertmanager-space-westus2.mydomain"
+      prometheus:
+        prometheusSpec:
+          storageSpec:
+            volumeClaimTemplate:
+              spec:
+                accessModes: ["ReadWriteOnce"]
+                resources:
+                  requests:
+                    storage: 10Gi
+        ingress:
+          enabled: true
+          annotations:
+            kubernetes.io/ingress.class: nginx
+            kubernetes.io/tls-acme: "true"
+          hosts:
+            - "prometheus-space-westus2.mydomain"
+          tls:
+            - secretName: "mysslcert"
+              hosts:
+                - "prometheus-space-westus2.mydomain"
+      grafana:
+        adminUser: "admin"
+        adminPassword: "grafana"
+        persistence:
+          enabled: true
+          accessModes: ["ReadWriteOnce"]
+          size: 10Gi
+        ingress:
+          enabled: true
+          annotations:
+            kubernetes.io/ingress.class: nginx
+            kubernetes.io/tls-acme: "true"
+          hosts:
+            - "grafana-space-westus2.mydomain"
+          tls:
+            - secretName: "mysslcert"
+              hosts:
+                - "grafana-space-westus2.mydomain"
+
+      kubelet:
+        serviceMonitor:
+          https: false
